@@ -7,6 +7,7 @@ const App = () => {
   const store = setupStore()
 
   return (
+    
     <Provider store={store}>
       <Main />
     </Provider>

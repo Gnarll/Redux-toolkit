@@ -1,23 +1,31 @@
-import { useGetPokemonByNameQuery } from './src/services/pokemonApi';
-import { Image, StyleSheet, Text, View } from 'react-native';
+
+import { StyleSheet, View } from 'react-native';
+import Pokemon from './src/components/Pokemon';
+import { useState } from 'react';
+import RNPickerSelect from 'react-native-picker-select';
 
 const  Main = () => {
 
-  const { data, error, isLoading } = useGetPokemonByNameQuery('bulbasaur')
+const pokemons = ['bulbasaur', 'pikachu', 'ditto', 'bulbasaur']
+
+const[interval, setInterval] = useState(0) 
+
+console.log(interval);
 
   return (
       <View style={styles.container}>
-        {error ? (
-          <Text>Oh no, there was an error</Text>
-        ) : isLoading ? (
-          <Text>Loading...</Text>
-        ) : data ? (
-          <>
-            <Text>{data.species.name}</Text>
-            <Image source={{uri:data.sprites.front_shiny}} style={{width: 100, height: 100}} />
-          </>
-        ) : null}
-        
+        <RNPickerSelect
+            value={interval}
+            onValueChange={(value) => setInterval(value)}
+            items={[
+                { label: 'Off', value: 0 },
+                { label: '1s', value: 1 },
+                { label: '5s', value: 5 },
+            ]}
+        />
+        {pokemons.map((pokemon, index) => {
+            return <Pokemon key={index} name={pokemon} pollingInterval={interval} />
+        })}
       </View>
   );
 }
@@ -30,5 +38,5 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }
 });
